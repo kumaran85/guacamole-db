@@ -1,0 +1,2 @@
+docker run --name some-guacd -d guacamole/guacd
+docker run --name some-guacamole --link some-guacd:guacd --env-file env-para -d -p 8080:8080 guacamole/guacamole 
