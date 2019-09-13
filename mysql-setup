@@ -1,0 +1,29 @@
+This is the command being used in mysql DB.
+
+CREATE DATABASE guacamole_db;
+CREATE USER 'guacamole_user'@'localhost' IDENTIFIED BY 'Guac@Mole123db';
+GRANT SELECT,INSERT,UPDATE,DELETE ON guacamole_db.* TO 'guacamole_user'@'10.64.236.68';
+
+GRANT SELECT,INSERT,UPDATE,DELETE ON guacamole_db.* TO 'guacamole_user'@'localhost';
+
+UPDATE mysql.user SET Host='%' WHERE Host='localhost' AND User='root';
+
+
+UPDATE mysql.user SET Host='%' WHERE Host='localhost' AND User='username';  #username as root and guacamole_user
+FLUSH PRIVILEGES;
+UPDATE mysql.db SET Host='%' WHERE Host='localhost' AND User='username';
+GRANT SELECT,INSERT,UPDATE,DELETE ON guacamole_db.* TO 'guacamole_user'@'localhost'; This is allowing from localhost only. 
+GRANT SELECT,INSERT,UPDATE,DELETE ON guacamole_db.* TO 'guacamole_user'@'%'; -> To connect from all remote servers. 
+
+
+select user, host from mysql.user; Below output should come, 
+ user             | host      |
++------------------+-----------+
+| guacamole_user   | %         |
+| root             | %         |
+
+
+And allow 3306 on DB server using 
+firewall-cmd --zone=public  --permanent --add-port=3306/tcp
+
+Copy schema scripts from guacamole container and execute on DB. 
