@@ -1,0 +1,25 @@
+version: "3.7"
+services:
+   guacd:
+     image: "guacamole/guacd"
+     expose:
+       - "4822"
+     container_name: "some-guacd"
+     restart: "always"
+     volumes:
+       - /root/env:/root/env/
+     env_file:
+       - ./env/mysql-para
+   guacamole:
+     image: "guacamole/guacamole"
+     ports:
+       - "8080:8080/tcp"
+     container_name: "some-guacamole"
+     links:
+       - guacd:some-guacd
+     depends_on:
+       - guacd
+     env_file:
+       - ./env/mysql-para
+     volumes:
+       - /root/env:/root/env/
